@@ -4,4 +4,5 @@ langchain-community==0.3.27
 langchain-google-genai==2.1.6
 faiss-cpu==1.11.0
 python-dotenv==1.0.0
-pydantic==2.8.2 
+pydantic==2.8.2
+youtube-transcript-api==0.6.2 
