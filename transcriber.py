@@ -3,35 +3,10 @@ from dotenv import load_dotenv
 from io import BytesIO
 import requests
 from elevenlabs import ElevenLabs
-from moviepy.editor import VideoFileClip
 import tempfile
 from api_utils import get_api_key
 
 load_dotenv()
-
-def convert_video_to_mp3(video_path, output_path=None):
-    """
-    Convert MP4 video to MP3 audio using moviepy
-    
-    Args:
-        video_path (str): Path to the video file
-        output_path (str, optional): Path for output MP3. If None, creates temp file
-        
-    Returns:
-        str: Path to the MP3 file
-    """
-    if output_path is None:
-        # Create a temporary file
-        temp_file = tempfile.NamedTemporaryFile(suffix='.mp3', delete=False)
-        output_path = temp_file.name
-        temp_file.close()
-    
-    print(f"Converting {video_path} to {output_path}...")
-    video = VideoFileClip(video_path)
-    video.audio.write_audiofile(output_path)
-    video.close()
-    print(f"Conversion complete: {output_path}")
-    return output_path
 
 def transcribe_url_with_diarization(url):
     """
@@ -96,13 +71,14 @@ def transcribe_video_with_diarization(video_file_path):
     Returns:
         tuple: (transcription_text, diarization_data)
     """
-    # Convert video to MP3
-    mp3_path = convert_video_to_mp3(video_file_path)
+    # For local files, we'll use the URL transcription approach
+    # This assumes the file is accessible via a URL or we'll need to upload it
+    # For now, we'll use the direct file approach with ElevenLabs
     
     try:
-        # Read the MP3 file
-        with open(mp3_path, 'rb') as audio_file:
-            audio_data = BytesIO(audio_file.read())
+        # Read the video file
+        with open(video_file_path, 'rb') as video_file:
+            video_data = BytesIO(video_file.read())
         
         # Transcribe with diarization
         elevenlabs = ElevenLabs(
@@ -110,7 +86,7 @@ def transcribe_video_with_diarization(video_file_path):
         )
         
         response = elevenlabs.speech_to_text.convert(
-            file=audio_data,
+            file=video_data,
             model_id="scribe_v1",
             tag_audio_events=True,
             language_code="eng",
@@ -134,10 +110,9 @@ def transcribe_video_with_diarization(video_file_path):
         
         return full_text, diarization_data
         
-    finally:
-        # Clean up temporary MP3 file
-        if os.path.exists(mp3_path):
-            os.unlink(mp3_path)
+    except Exception as e:
+        print(f"Error transcribing video file: {str(e)}")
+        return "", {}
 
 def transcribe_video(video_file_path):
     """

@@ -99,7 +99,7 @@ talk-to-vidz/
 - **ElevenLabs**: High-quality transcription and diarization
 - **Google Gemini**: AI language model for chat and content generation
 - **LangChain**: Vector database and AI orchestration
-- **MoviePy**: Video processing
+- **ElevenLabs**: Direct video/audio transcription
 - **Requests**: HTTP requests for API calls
 
 ## API Keys Required
