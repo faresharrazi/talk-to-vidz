@@ -57,7 +57,7 @@ def get_replay_url(session_id):
     # Get API key from environment
     api_key = get_api_key("LS_API_KEY")
     if not api_key:
-        return "Error: LS_API_KEY not found in .env file"
+        return "Error: Livestorm API Key is required. Please add your API key in the sidebar settings."
     
     # API endpoint
     url = f"https://api.livestorm.co/v1/sessions/{session_id}?include=recordings"
