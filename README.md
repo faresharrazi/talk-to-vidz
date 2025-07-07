@@ -26,8 +26,10 @@ An AI-powered chat application that allows you to interact with your Livestorm s
    ```
    ELEVENLABS_API_KEY=your_elevenlabs_api_key
    GEMINI_API_KEY=your_gemini_api_key
-   LIVESTORM_API_KEY=your_livestorm_api_key
+   LS_API_KEY=your_livestorm_api_key
    ```
+
+   **Note**: Only the Livestorm API key needs to be entered in the app interface. The other API keys are automatically loaded from environment variables.
 
 3. **Run the Application**
 

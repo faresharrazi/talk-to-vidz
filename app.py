@@ -14,14 +14,25 @@ st.set_page_config(page_title="Talk to Video", layout="wide")
 
 # --- Settings Sidebar ---
 st.sidebar.header("Settings")
-api_keys = setup_api_keys()
 
-for key in api_keys:
-    api_keys[key] = st.sidebar.text_input(f"{key}", value=str(st.session_state[key] or ''), type="password" if "KEY" in key else "default")
-    if api_keys[key]:
-        st.session_state[key] = str(api_keys[key])
-    elif not st.session_state[key]:
-        st.session_state[key] = str(os.getenv(key, '') or '')
+# Only show Livestorm API key input
+ls_api_key = st.sidebar.text_input(
+    "Livestorm API Key", 
+    value=str(st.session_state.get('LS_API_KEY', '') or ''), 
+    type="password",
+    help="Enter your Livestorm API key to access session replays"
+)
+
+if ls_api_key:
+    st.session_state['LS_API_KEY'] = str(ls_api_key)
+elif not st.session_state.get('LS_API_KEY'):
+    st.session_state['LS_API_KEY'] = str(os.getenv('LS_API_KEY', '') or '')
+
+# Set up other API keys from environment variables (hidden from user)
+api_keys = setup_api_keys()
+for key in ['ELEVENLABS_API_KEY', 'GEMINI_API_KEY']:
+    env_val = str(os.getenv(key, '') or '')
+    st.session_state.setdefault(key, env_val)
 
 # Main container
 with st.container():
