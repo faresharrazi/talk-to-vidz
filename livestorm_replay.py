@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import json
 import tempfile
 from transcriber import transcribe_video_with_diarization
+from api_utils import get_api_key
 
 load_dotenv()
 
@@ -54,7 +55,7 @@ def get_replay_url(session_id):
         str: The replay URL or error message
     """
     # Get API key from environment
-    api_key = os.getenv("LS_API_KEY")
+    api_key = get_api_key("LS_API_KEY")
     if not api_key:
         return "Error: LS_API_KEY not found in .env file"
     

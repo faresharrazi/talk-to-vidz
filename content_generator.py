@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from pydantic import SecretStr
+from api_utils import get_api_key
 
 load_dotenv()
 
@@ -9,7 +10,7 @@ def setup_content_generator():
     return ChatGoogleGenerativeAI(
         model="gemini-2.0-flash",
         temperature=0.7,
-        google_api_key=SecretStr(os.environ["GEMINI_API_KEY"])
+        google_api_key=SecretStr(get_api_key("GEMINI_API_KEY"))
     )
 
 def load_prompt(content_type):

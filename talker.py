@@ -6,6 +6,7 @@ from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import PromptTemplate
 from langchain_google_genai import ChatGoogleGenerativeAI
 from pydantic import SecretStr
+from api_utils import get_api_key
 
 load_dotenv()
 
@@ -15,7 +16,7 @@ def setup_qa_system(transcription_text):
     
     embeddings = GoogleGenerativeAIEmbeddings(
         model="models/embedding-001", 
-        google_api_key=SecretStr(os.environ["GEMINI_API_KEY"])
+        google_api_key=SecretStr(get_api_key("GEMINI_API_KEY"))
     )
     vector_store = FAISS.from_documents(chunks, embeddings)
     
@@ -27,7 +28,7 @@ def setup_qa_system(transcription_text):
     llm = ChatGoogleGenerativeAI(
         model="gemini-2.0-flash", 
         temperature=0.2, 
-        google_api_key=SecretStr(os.environ["GEMINI_API_KEY"])
+        google_api_key=SecretStr(get_api_key("GEMINI_API_KEY"))
     )
     
     prompt = PromptTemplate(
@@ -50,7 +51,7 @@ def setup_qa_system_with_diarization(transcription_text, diarization_data):
     
     embeddings = GoogleGenerativeAIEmbeddings(
         model="models/embedding-001", 
-        google_api_key=SecretStr(os.environ["GEMINI_API_KEY"])
+        google_api_key=SecretStr(get_api_key("GEMINI_API_KEY"))
     )
     vector_store = FAISS.from_documents(chunks, embeddings)
     
@@ -62,7 +63,7 @@ def setup_qa_system_with_diarization(transcription_text, diarization_data):
     llm = ChatGoogleGenerativeAI(
         model="gemini-2.0-flash", 
         temperature=0.2, 
-        google_api_key=SecretStr(os.environ["GEMINI_API_KEY"])
+        google_api_key=SecretStr(get_api_key("GEMINI_API_KEY"))
     )
     
     prompt = PromptTemplate(

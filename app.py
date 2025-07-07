@@ -1,11 +1,27 @@
 import streamlit as st
 import tempfile
 import os
+import re
+from dotenv import load_dotenv
 from livestorm_replay import process_livestorm_session
 from talker import setup_qa_system, ask_question, setup_qa_system_with_diarization
 from content_generator import generate_summary, generate_social_media_posts, generate_email_template, generate_blog_post
+from api_utils import get_api_key, setup_api_keys
+
+load_dotenv()
 
 st.set_page_config(page_title="Talk to Video", layout="wide")
+
+# --- Settings Sidebar ---
+st.sidebar.header("Settings")
+api_keys = setup_api_keys()
+
+for key in api_keys:
+    api_keys[key] = st.sidebar.text_input(f"{key}", value=str(st.session_state[key] or ''), type="password" if "KEY" in key else "default")
+    if api_keys[key]:
+        st.session_state[key] = str(api_keys[key])
+    elif not st.session_state[key]:
+        st.session_state[key] = str(os.getenv(key, '') or '')
 
 # Main container
 with st.container():

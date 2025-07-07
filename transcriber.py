@@ -2,9 +2,10 @@ import os
 from dotenv import load_dotenv
 from io import BytesIO
 import requests
-from elevenlabs.client import ElevenLabs
+from elevenlabs import ElevenLabs
 from moviepy.editor import VideoFileClip
 import tempfile
+from api_utils import get_api_key
 
 load_dotenv()
 
@@ -43,7 +44,7 @@ def transcribe_url_with_diarization(url):
         tuple: (transcription_text, diarization_data)
     """
     elevenlabs = ElevenLabs(
-        api_key=os.getenv("ELEVENLABS_API_KEY"),
+        api_key=get_api_key("ELEVENLABS_API_KEY"),
     )
     
     # Transcribe using cloud storage URL
@@ -105,7 +106,7 @@ def transcribe_video_with_diarization(video_file_path):
         
         # Transcribe with diarization
         elevenlabs = ElevenLabs(
-            api_key=os.getenv("ELEVENLABS_API_KEY"),
+            api_key=get_api_key("ELEVENLABS_API_KEY"),
         )
         
         response = elevenlabs.speech_to_text.convert(
