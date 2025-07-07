@@ -131,7 +131,7 @@ if st.session_state.qa_system is not None:
                 with st.chat_message("user"):
                     st.write(message["content"])
             else:
-                with st.chat_message("assistant"):
+                with st.chat_message("assistant", avatar="assets/ls_bot.png"):
                     st.write(message["content"])
         
         with st.spinner("Thinking..."):
@@ -152,7 +152,7 @@ if st.session_state.qa_system is not None:
                     with st.chat_message("user"):
                         st.write(message["content"])
                 else:
-                    with st.chat_message("assistant"):
+                    with st.chat_message("assistant", avatar="assets/ls_bot.png"):
                         st.write(message["content"])
     
     st.markdown("**Quick Actions:**")
