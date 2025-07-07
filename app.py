@@ -1,167 +1,198 @@
 import streamlit as st
 import tempfile
 import os
-from transcriber import transcribe_video
-from ythubetrans import transcribe_youtube_video
-from talker import setup_qa_system, ask_question
+from livestorm_replay import process_livestorm_session
+from talker import setup_qa_system, ask_question, setup_qa_system_with_diarization
+from content_generator import generate_summary, generate_social_media_posts, generate_email_template, generate_blog_post
 
 st.set_page_config(page_title="Talk to Video", layout="wide")
 
-st.title("Talk to Video")
-st.markdown("Upload a video or paste a YouTube link to chat with AI about its content")
+# Main container
+with st.container():
+    st.markdown("<h1 style='text-align: center;'>Talk to your LS Session</h1>", unsafe_allow_html=True)
 
 # Initialize session state
 if 'qa_system' not in st.session_state:
     st.session_state.qa_system = None
 if 'transcription' not in st.session_state:
     st.session_state.transcription = ""
+if 'diarization_data' not in st.session_state:
+    st.session_state.diarization_data = None
 if 'chat_history' not in st.session_state:
     st.session_state.chat_history = []
 if 'video_source' not in st.session_state:
     st.session_state.video_source = ""
 
-# Sidebar for video input
-with st.sidebar:
-    st.header("Video Input")
+# Main input area
+if st.session_state.qa_system is None:
+    col1, col2, col3 = st.columns([1, 2, 1])
     
-    # Tabs for different input methods
-    tab1, tab2 = st.tabs(["Upload File", "YouTube Link"])
-    
-    with tab1:
-        st.subheader("Upload Video")
-        uploaded_file = st.file_uploader(
-            "Choose a video file", 
-            type=['mp4', 'avi', 'mov', 'mkv']
+    with col2:
+        session_id_input = st.text_input(
+            "Session ID",
+            placeholder="04a6e7e0-85f9-41b6-8fa1-bfe530923c40",
+            label_visibility="collapsed"
         )
         
-        if uploaded_file is not None:
-            st.write(f"File: {uploaded_file.name}")
-            st.write(f"Size: {uploaded_file.size / (1024*1024):.2f} MB")
-            
-            if st.button("Transcribe & Setup Chat", key="upload_btn", type="primary"):
-                with st.spinner("Processing video..."):
+        if st.button("Let's Chat", type="primary", use_container_width=True):
+            if session_id_input:
+                with st.spinner("Processing..."):
                     try:
-                        # Save uploaded file to temporary location
-                        with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tmp_file:
-                            tmp_file.write(uploaded_file.getvalue())
-                            tmp_file_path = tmp_file.name
+                        result = process_livestorm_session(session_id_input)
                         
-                        # Transcribe the video
-                        transcription = transcribe_video(tmp_file_path)
-                        
-                        # Clean up temporary file
-                        os.unlink(tmp_file_path)
-                        
-                        # Setup Q&A system
-                        retriever, llm, prompt = setup_qa_system(transcription)
-                        st.session_state.qa_system = (retriever, llm, prompt)
-                        st.session_state.transcription = transcription
-                        st.session_state.chat_history = []
-                        st.session_state.video_source = f"Uploaded: {uploaded_file.name}"
-                        
-                        st.success("Video processed! You can now chat about it.")
+                        if result[0] is None:
+                            st.error(f"Error: {result[1]}")
+                        else:
+                            transcription, diarization_data = result
+                            
+                            retriever, llm, prompt = setup_qa_system_with_diarization(transcription, diarization_data)
+                            st.session_state.qa_system = (retriever, llm, prompt)
+                            st.session_state.transcription = transcription
+                            st.session_state.diarization_data = diarization_data
+                            st.session_state.chat_history = []
+                            st.session_state.video_source = f"Session: {session_id_input}"
+                            
+                            if diarization_data and 'words' in diarization_data:
+                                speakers = set(word.speaker_id for word in diarization_data['words'] if hasattr(word, 'speaker_id') and word.speaker_id is not None)
+                                if len(speakers) > 0:
+                                    st.success(f"✅ Ready! {len(speakers)} speakers detected.")
+                                else:
+                                    st.success("✅ Ready!")
+                            else:
+                                st.success("✅ Ready!")
+                            
+                            st.rerun()
                         
                     except Exception as e:
                         st.error(f"Error: {str(e)}")
-    
-    with tab2:
-        st.subheader("YouTube Link")
-        youtube_url = st.text_input(
-            "Paste YouTube URL or Video ID",
-            placeholder="https://www.youtube.com/watch?v=... or dQw4w9WgXcQ"
-        )
-        
-        if youtube_url:
-            st.write(f"Input: {youtube_url}")
-            
-            if st.button("Transcribe & Setup Chat", key="youtube_btn", type="primary"):
-                with st.spinner("Getting YouTube transcript..."):
-                    try:
-                        # Transcribe YouTube video
-                        transcription = transcribe_youtube_video(youtube_url)
-                        
-                        # Setup Q&A system
-                        retriever, llm, prompt = setup_qa_system(transcription)
-                        st.session_state.qa_system = (retriever, llm, prompt)
-                        st.session_state.transcription = transcription
-                        st.session_state.chat_history = []
-                        st.session_state.video_source = f"YouTube: {youtube_url}"
-                        
-                        st.success("YouTube video processed! You can now chat about it.")
-                        
-                    except Exception as e:
-                        st.error(f"Error: {str(e)}")
+            else:
+                st.error("Please enter a Session ID")
 
 # Main chat interface
 if st.session_state.qa_system is not None:
-    st.header("Chat About Your Video")
+    col1, col2 = st.columns([4, 1])
     
-    # Display video source
-    if st.session_state.video_source:
-        st.info(f"Source: {st.session_state.video_source}")
+    with col1:
+        if st.session_state.video_source:
+            st.info(f"Source: {st.session_state.video_source}")
     
-    # Display transcription preview
-    with st.expander("Video Transcription"):
-        st.text_area("Transcription:", value=st.session_state.transcription, height=200, disabled=True)
+    with col2:
+        if st.button("🔄 New Session", type="secondary"):
+            st.session_state.qa_system = None
+            st.session_state.transcription = ""
+            st.session_state.diarization_data = None
+            st.session_state.chat_history = []
+            st.session_state.video_source = ""
+            st.rerun()
     
-    # Chat input
+    if st.session_state.diarization_data and 'words' in st.session_state.diarization_data:
+        speakers = set(word.speaker_id for word in st.session_state.diarization_data['words'] if hasattr(word, 'speaker_id') and word.speaker_id is not None)
+        if len(speakers) > 0:
+            st.write(f"🎤 {len(speakers)} speakers detected")
+    
+    with st.expander("📄 Full Transcript", expanded=False):
+        st.text_area("Transcription", value=st.session_state.transcription, height=300, disabled=True)
+    
     user_question = st.chat_input("Ask a question about your video...")
     
     if user_question:
-        # Add user message to chat history
         st.session_state.chat_history.append({"role": "user", "content": user_question})
         
-        # Get AI response
+        st.subheader("Chat History")
+        for message in st.session_state.chat_history:
+            if message["role"] == "user":
+                with st.chat_message("user"):
+                    st.write(message["content"])
+            else:
+                with st.chat_message("assistant"):
+                    st.write(message["content"])
+        
         with st.spinner("Thinking..."):
             try:
                 retriever, llm, prompt = st.session_state.qa_system
                 answer = ask_question(retriever, llm, prompt, user_question)
                 st.session_state.chat_history.append({"role": "assistant", "content": answer})
+                st.rerun()
             except Exception as e:
                 error_msg = f"Sorry, I encountered an error: {str(e)}"
                 st.session_state.chat_history.append({"role": "assistant", "content": error_msg})
+                st.rerun()
+    else:
+        if st.session_state.chat_history:
+            st.subheader("Chat History")
+            for message in st.session_state.chat_history:
+                if message["role"] == "user":
+                    with st.chat_message("user"):
+                        st.write(message["content"])
+                else:
+                    with st.chat_message("assistant"):
+                        st.write(message["content"])
     
-    # Display chat history
-    for message in st.session_state.chat_history:
-        if message["role"] == "user":
-            with st.chat_message("user"):
-                st.write(message["content"])
-        else:
-            with st.chat_message("assistant"):
-                st.write(message["content"])
+    st.markdown("**Quick Actions:**")
+    col1, col2, col3, col4 = st.columns(4)
     
-    # Download options
+    with col1:
+        if st.button("📝 Summarize", type="secondary", use_container_width=True):
+            with st.spinner("Generating content..."):
+                try:
+                    summary = generate_summary(st.session_state.transcription)
+                    st.session_state.chat_history.append({"role": "user", "content": "Generate a summary"})
+                    st.session_state.chat_history.append({"role": "assistant", "content": summary})
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error generating summary: {str(e)}")
+    
+    with col2:
+        if st.button("📱 Social Media", type="secondary", use_container_width=True):
+            with st.spinner("Generating content..."):
+                try:
+                    social_posts = generate_social_media_posts(st.session_state.transcription)
+                    st.session_state.chat_history.append({"role": "user", "content": "Generate social media posts"})
+                    st.session_state.chat_history.append({"role": "assistant", "content": social_posts})
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error generating social media posts: {str(e)}")
+    
+    with col3:
+        if st.button("📧 Follow-up Email", type="secondary", use_container_width=True):
+            with st.spinner("Generating content..."):
+                try:
+                    email_template = generate_email_template(st.session_state.transcription)
+                    st.session_state.chat_history.append({"role": "user", "content": "Generate follow-up email"})
+                    st.session_state.chat_history.append({"role": "assistant", "content": email_template})
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error generating email template: {str(e)}")
+    
+    with col4:
+        if st.button("📄 Blog Post", type="secondary", use_container_width=True):
+            with st.spinner("Generating content..."):
+                try:
+                    blog_post = generate_blog_post(st.session_state.transcription)
+                    st.session_state.chat_history.append({"role": "user", "content": "Generate blog post"})
+                    st.session_state.chat_history.append({"role": "assistant", "content": blog_post})
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error generating blog post: {str(e)}")
+    
     if st.session_state.chat_history:
+        st.markdown("---")
         col1, col2 = st.columns(2)
+        
         with col1:
             st.download_button(
-                "Download Chat History",
+                "📥 Download Chat History",
                 data="\n\n".join([f"{msg['role'].title()}: {msg['content']}" for msg in st.session_state.chat_history]),
                 file_name="chat_history.txt",
-                mime="text/plain"
+                mime="text/plain",
+                use_container_width=True
             )
         
         with col2:
             st.download_button(
-                "Download Transcription",
+                "📥 Download Transcription",
                 data=st.session_state.transcription,
                 file_name="transcription.txt",
-                mime="text/plain"
-            )
-
-else:
-    st.info("Please upload a video file or paste a YouTube link in the sidebar to get started")
-    
-    st.subheader("Example Questions:")
-    st.markdown("""
-    - What is the main topic of this video?
-    - Who are the people mentioned in the video?
-    - What are the key points discussed?
-    - Can you summarize the video content?
-    """)
-    
-    st.subheader("Supported Inputs:")
-    st.markdown("""
-    - **Video Files**: MP4, AVI, MOV, MKV
-    - **YouTube URLs**: Full YouTube links or video IDs
-    """) 
+                mime="text/plain",
+                use_container_width=True
+            ) 

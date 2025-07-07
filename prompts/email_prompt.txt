@@ -1,0 +1,138 @@
+**Situation:** Your webinar on Livestorm has just concluded and you want an email template to leverage the event content to provide value to your wider audience (mainly marketing leads) and potentially attract them to future events in an email. This mail is directed to contacts who were not supposed to attend the event.
+
+**Objective:** Create a single follow-up email
+
+**Instruction:**
+1. Analyze the transcript for valid content. Valid content includes meaningful sentences, keywords related to the webinar topic, and a reasonable length. If the transcript consists only of empty strings, whitespace, or irrelevant filler (e.g., 'um,' 'ah,' 'thank you'), consider it empty.
+2. If the transcript is empty, output the message: 'Transcript is empty.'
+3. If not empty, Analyze the transcript to identify:
+   a. The host's persona (example: promoter penny, trainer tracy, seller sammy, educator emily, facilitator franky)
+   b. The event type (example: webinar, training session, product demo, internal all-hands)
+   c. The main topic and objectives of the event
+   d. Detect the language and generate content EXCLUSIVELY in that language
+4. Based on the identified persona, use the corresponding suggested content below to structure your email. Fill in each section with relevant information from the transcript.
+5. Rely strictly on the provided transcript, without including external information.
+6. CRITICAL: Generate content EXCLUSIVELY in the detected language of the transcript
+7. DO NOT translate, provide multiple languages, or mix languages
+8. If the transcript is in Spanish, generate ONLY Spanish emails
+9. If the transcript is in English, generate ONLY English emails
+10. If the transcript is in French, generate ONLY French emails
+11. And so on for any other language
+
+**Suggested content for each persona:**
+
+**For Promoter Penny - Email Newsletter for Contact Nurturing**
+*A marketing professional focused on generating interest and leads through engaging content and events. Typical use cases include marketing webinars, roundtables, expert testimonials.*
+
+Content:
+Event summary:
+- A concise 2-3 paragraph overview of the webinar's main topic and key points
+- This provides quick value for those who didn't attend and want to learn more about the content
+Key takeaways:
+- 3-5 bullet points highlighting the most important insights from the webinar
+- These should be actionable and provide immediate value to readers
+Speaker quotes:
+- 2-3 impactful quotes from the speaker(s), highlighting their expertise and the webinar's value
+- These can be used to create social media-friendly content and encourage sharing
+Q&A highlights:
+- A selection of 2-3 interesting questions from the audience and their answers
+- This demonstrates the interactive nature of our webinars and the depth of insights provided
+Downloadable resource (if available):
+- A practical, value-added item related to the webinar topic such as a checklist, template, or mini-guide
+- This gives recipients something tangible to implement and keeps our brand top-of-mind
+Full webinar recording:
+- Access to the complete webinar recording for those who want to watch or rewatch
+- This allows us to capture leads who might be interested in the full content
+Next event teaser:
+- A brief description of our upcoming webinar or event, including the topic, date, and main value proposition
+- This helps build interest and anticipation for future events
+Feedback form link:
+- A short survey to gather opinions on the webinar content and suggestions for future topics
+- This helps us improve and shows we value attendee input
+
+**For Trainer Tracy - Follow-up Recap Email of the Training**
+*An educator or corporate trainer dedicated to onboarding and coaching people effectively through virtual sessions. Typical use cases include product training, customer training, onboarding sessions, large and small group coaching.*
+
+Content:
+- Summary of key learning objectives
+- List of main concepts covered
+- Practical tips for applying new skills
+- Links to additional resources or practice materials
+- Reminder of any assignments or next steps
+- FAQ addressing common questions from the training
+- Invitation for feedback on the training
+- Information on advanced or related training opportunities
+- Contact information for further support
+
+**For Seller Sammy - Follow-up Email with Key Selling Points**
+*A sales representative who qualifies leads and closes deals through product demonstrations and virtual meetings. Typical use cases include sales demos, product demos, sales negotiation calls.*
+
+Content:
+- Recap of client's specific needs discussed
+- List of product/service features addressing those needs
+- Quantifiable benefits or ROI projections
+- Case study or success story relevant to the client's industry
+- Answers to questions raised during the demo
+- Next steps in the sales process
+- Limited-time offer or incentive
+- Testimonial from a similar client
+- Link to a personalized proposal or quote
+
+**For Facilitator Franky - Follow-up Email with Key Takeaways**
+*A collaborative leader who collects and shares information with people, facilitating productive discussions and decision-making. Typical use cases include internal all hands, team meetings, group meetings, brainstorming sessions and workshops.*
+
+Content:
+- Summary of main discussion points
+- List of decisions made during the event
+- Action items with assigned responsibilities and deadlines
+- Key insights or breakthroughs from the session
+- Links to relevant documents or resources shared
+- Next steps or follow-up meeting details
+- Invitation for additional feedback or thoughts
+- Thank you to specific contributors or participants
+- Reminder of overall project goals or vision
+
+**For Educator Emily - Follow-up Recap Email of the Class**
+*A teacher or instructor who shares knowledge with others through online courses and educational webinars. Typical use cases include online courses and education.*
+
+Content:
+- Summary of key concepts covered
+- Important formulas, definitions, or principles
+- Links to recommended reading or study materials
+- Practice problems or exercises
+- Preview of upcoming topics in the next class
+- Reminders of upcoming assignments or exams
+- Study tips or strategies related to the material
+- Office hours or support resources available
+- Encouragement or motivational message
+- Any changes to the syllabus or course schedule
+
+**Input Data:** Livestorm event transcript
+
+**Output format for all suggest content:**
+
+- Format: Markdown
+- Generate content EXCLUSIVELY in the detected language of the transcript
+- DO NOT translate or provide multiple language versions
+- Never mention the persona
+- Write in a natural email format with flowing paragraphs
+- No bullet points or lists
+- Do not use any square brackets, placeholders, or variables - use specific details from the transcript only
+- Subject line should be written as plain text, for example:
+  "Missed our webinar? Here are the key insights from today's session"
+  "Watch the replay: Complete guide to digital marketing strategies"
+- Avoid formal sections or labels
+- Create natural paragraph transitions
+- Write as if having a genuine conversation with the recipient
+- Include specific examples and details from the actual event
+- 200-300 words
+- Provide 1 natural subject line option
+- Maintain a warm, conversational tone throughout
+- Avoid subtitles in the content and only use paragraphs
+
+**Additional notes:**
+
+- Each paragraph should flow naturally into the next
+- Include specific numbers, quotes, and examples from the transcript
+- Avoid generic phrases like "key takeaways" or "main points"
+- Write as if recapping the event to a colleague over coffee 

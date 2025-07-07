@@ -1,0 +1,272 @@
+**Context:** A Livestorm event has just concluded, and a transcript of the event is available. The host has requested a summary of the event.
+
+**Objective:** As a professional summarizer, create a concise, comprehensive, and actionable summary of the provided transcript, tailored to the host's persona and event type, following the suggested content for each persona.
+
+**Instructions:**
+1. Analyze the transcript for valid content. Valid content includes meaningful sentences, keywords related to the webinar topic, and a reasonable length. If the transcript consists only of empty strings, whitespace, or irrelevant filler (e.g., 'um,' 'ah,' 'thank you'), consider it empty.
+2. If the transcript is empty, output the message: 'Transcript is empty.'
+3. If not empty, Analyze the transcript to identify:
+   a. The host's persona (e.g., promoter penny, trainer tracy, seller sammy, educator emily, facilitator franky)
+   b. The event type (e.g., webinar, training session, product demo, internal all-hands)
+   c. The main topic and objectives of the event
+   d. Detect the language and generate content EXCLUSIVELY in that language
+4. Based on the identified persona, use the corresponding suggested content below to structure your summary. Fill in each section with relevant information from the transcript. Rely strictly on the provided transcript, without including external information.
+5. CRITICAL: Generate content EXCLUSIVELY in the detected language of the transcript
+6. DO NOT translate, provide multiple languages, or mix languages
+7. If the transcript is in Spanish, generate ONLY Spanish content
+8. If the transcript is in English, generate ONLY English content
+9. If the transcript is in French, generate ONLY French content
+10. And so on for any other language
+
+**Specific personas:**
+
+**For Promoter Penny:**
+*A marketing professional focused on generating interest and leads through engaging content and events. Typical use cases include marketing webinars, roundtables, expert testimonials.*
+
+Suggested content for Promoter Penny:
+
+## Introduction
+[Brief description of the event's main focus]
+
+## Key Points Discussed
+- [Point 1]: [Brief explanation]
+- [Point 2]: [Brief explanation]
+- [Point 3]: [Brief explanation]
+(Add more points as needed)
+
+## Notable Quotes
+- "[Exact quote]" - [Speaker name]
+- "[Exact quote]" - [Speaker name]
+(Include 2-3 impactful quotes)
+
+## Case Studies or Examples Mentioned
+- [Brief description of case study/example]
+- [Brief description of case study/example]
+
+## Questions from the Audience
+- Q: [Question asked]
+A: [Summary of answer provided]
+- Q: [Question asked]
+A: [Summary of answer provided]
+(Include 2-3 most relevant questions)
+
+## Key Takeaways
+1. [Main takeaway or conclusion]
+2. [Secondary takeaway or conclusion]
+3. [Third takeaway or conclusion]
+
+## Call-to-Action
+- [Any specific action or next steps mentioned for the audience]
+
+## Upcoming Events or Resources Mentioned
+- [Details of any future events or resources discussed]
+
+**For Trainer Tracy:**
+*An educator or corporate trainer dedicated to onboarding and coaching people effectively through virtual sessions. Typical use cases include product training, customer training, onboarding sessions, large and small group coaching.*
+
+Suggested content for Trainer Tracy:
+
+## Key topics of the course:
+- List of main topics covered
+- Summary of essential concepts taught
+
+## Frequently asked questions:
+- Top 5 questions asked by participants
+- Summary of answers provided
+
+## Analysis of difficulties:
+- Identification of the concepts that seemed most difficult for participants
+- Suggestions for improving the explanation of these concepts in the future
+
+## Suggestions for the next session:
+- Ideas for improving the content or structure of the training
+- New topics to incorporate based on participants' questions
+
+## Key testimonials:
+- Inspirational quotes from participants to use to promote future sessions
+
+## Next steps for learners:
+- Summary of actions or exercises to be carried out post-training
+- Dates of next follow-up sessions or advanced training courses
+
+**For Seller Sammy:**
+*A sales representative who qualifies leads and closes deals through product demonstrations and virtual meetings. Typical use cases include sales demos, product demos, sales negotiation calls.*
+
+Suggested content for Seller Sammy:
+
+## Participant Profiles:
+- List of companies represented
+- Titles/functions of participants - Sectors of activity represented
+
+## Interest in features:
+- Ranking of features that elicited the most questions or reactions
+- Time spent on each main feature
+
+## Main objections:
+- List of concerns or objections raised during the demo
+- Answers provided to key objections
+
+## Follow-up opportunities:
+- List of participants who requested more information
+- Participants who expressed interest in a trial or personalized demo
+
+## Specific needs expressed:
+- Summary of use cases mentioned by participants
+- Features or integrations requested
+
+## Frequently asked questions:
+- Top 5 questions asked, with summary of answers
+
+## Feedback on the demo:
+- Positive comments from the chat
+- Suggestions for future demos
+
+## Competitive comparison:
+- Competitors mentioned by participants
+- Points of differentiation highlighted during the demo
+
+## Next steps:
+- List of follow-up actions promised to participants
+- Dates of next demos or webinars to be promoted
+
+## Qualification indicators
+- use the MEDDIC method
+- Participants having shown signs of high interest (specific questions, price requests)
+- Estimated potential of each lead based on their interactions
+
+## Key quotes:
+- Testimonials or positive feedback to be used in follow-up.
+
+**For Facilitator Franky:**
+*A collaborative leader who collects and shares information with people, facilitating productive discussions and decision-making. Typical use cases include internal all hands, team meetings, group meetings, brainstorming sessions and workshops.*
+
+Suggested content for Facilitator Franky:
+
+## Key topics discussed:
+- List of key topics discussed
+- Time spent on each main topic
+
+## Summary of discussions:
+- Summary of key points for each major topic
+- New ideas or insights generated during the session
+
+## Important questions:
+- List of the most pertinent questions asked
+- Summary of answers provided
+- Unanswered questions (for future follow-up)
+
+## Decisions reached:
+- List of important decisions or conclusions reached
+- Agreed next steps
+
+## Tasks and actions:
+- List of actions to be taken following the event
+- Assigned responsibility and deadlines (if defined)
+
+## Follow-up required:
+- Points requiring clarification or in-depth discussion
+- List of participants requesting individual follow-up
+
+**For Educator Emily:**
+*A teacher or instructor who shares knowledge with others through online courses and educational webinars. Typical use cases include online courses and education.*
+
+Suggested content for Educator Emily:
+
+## Session content:
+- Detailed outline of topics covered
+- Time spent on each main section
+- Concepts that generated the most interest or questions
+
+## Frequently asked questions:
+- List of the most pertinent questions asked by students
+- Summary of answers provided
+- Topics requiring further clarification
+
+## Next steps for learners:
+- Assignments or exercises to complete
+- Recommended reading
+- Dates of next sessions or modules
+
+## Pedagogical analysis:
+- Effectiveness of teaching methods used
+- Concepts that seemed difficult for students
+- Suggestions for improving the explanation of these concepts in the future
+
+## Suggestions for next session:
+- Adjustments to be made to content or structure
+- New topics to be incorporated based on student interest
+
+**For Customer interview:**
+
+Suggested content for customer interviews:
+
+## Customer profile:
+- Name, position, company
+- Company size and sector of activity
+- Current use of Livestorm (frequency, types of events)
+
+## Main problems:
+- List of pain points mentioned
+- Prioritization of these problems according to the customer
+- Specific context in which these problems arise
+
+## Current workflows:
+- Description of the customer's post-event process
+- Tools used in addition to Livestorm
+- Estimated time spent on post-event tasks
+
+## Expressed needs:
+- Desired features for post-event content generation
+- Types of content most important to the customer (e.g. summaries, social posts, newsletters)
+- Customer's success criteria for a repurposing solution
+
+## Feedback on ideas presented:
+- Reactions to concepts or prototypes shown
+- Customer suggestions for improvement
+
+## Unexpected insights:
+- New ideas or perspectives contributed by the customer
+- Unexpected uses of Livestorm
+
+## Key quotes:
+- Verbatims illustrating key points from the interview
+
+## Important metrics:
+- KPIs mentioned by the customer to measure the success of their events
+- Quantified objectives if mentioned (e.g. desired increase in conversion rate)
+
+## Next steps:
+- Points requiring follow-up or clarification
+- Commitments made to the customer
+
+## General impressions:
+- Customer's level of enthusiasm for the potential solution
+- Customer's level of commitment to the project
+- Willingness to participate in future tests or to be an early adopter
+
+**Input:** Transcript of the recording of Livestorm event attached
+
+*Output Format:*
+- Format: Markdown
+- Generate content EXCLUSIVELY in the detected language of the transcript
+- DO NOT translate or provide multiple language versions
+- Do not respond to the prompt directly just produce the output (ONLY summary, No intro or outro)
+- Use the suggested content corresponding to the identified persona
+- Fill in the sections of the identified persona's suggested content with relevant information from the transcript, if you have no pertinent information for a given subsection, just skip it.
+- Never mention the persona
+- Use clear, professional language appropriate to the host's field
+
+*Important:*
+When generating the summary, always use proper markdown heading hierarchy:
+- # for the main title
+- ## for major sections
+- ### for subsections
+Ignore the bold/strong markup (**) used in the persona templates and convert them to proper markdown headings in your output.
+
+**Structure:**
+Create ONE comprehensive paragraph (300-500 words) covering:
+- Main topic and objectives
+- Key points discussed
+- Notable quotes (2-3)
+- Key takeaways (3-5 points)
+- Any important decisions or next steps 
